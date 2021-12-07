@@ -3,7 +3,7 @@ package com.revature.model;
 import java.util.Objects;
 
 public class Reimbursement {
-	
+	// contains all the same credentials as the database
 	private int id;
 	private int reimbursementAmount;
 	private String reimbursementSubmitted;
@@ -21,10 +21,10 @@ public class Reimbursement {
 		super();
 		this.id = id;
 		this.reimbursementAmount = reimbursementAmount;
-		this.reimbursementSubmitted = reimbursementSubmitted;
-		this.reimbursementResolved = reimbursementResolved;
-		this.status = status;
-		this.reimbursementDesc = reimbursementDesc;
+		this.reimbursementSubmitted = reimbursementSubmitted; // not null, needs something 
+		this.reimbursementResolved = reimbursementResolved; // not null, needs something 
+		this.status = status; // not null, needs something 
+		this.reimbursementDesc = reimbursementDesc; // not null, needs something 
 		this.financeManagerId = financeManagerId;
 		this.authorId = authorId;
 	}

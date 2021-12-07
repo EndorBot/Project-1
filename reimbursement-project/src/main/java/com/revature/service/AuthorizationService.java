@@ -14,4 +14,9 @@ public class AuthorizationService {
 		
 	}
 
+	public void authorizeEmployee(User currentlyLoggedInUser) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
