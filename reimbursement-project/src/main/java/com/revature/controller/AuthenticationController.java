@@ -57,7 +57,7 @@ public class AuthenticationController implements Controller {
 			ctx.json(session.getAttribute("currentuser"));
 			ctx.status(200);
 		} else {
-			ctx.json(new MessageDTO("User is not logged in"));
+			ctx.json(new MessageDTO("No user is logged in"));
 			ctx.status(401);
 		}
 	};

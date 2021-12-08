@@ -32,7 +32,7 @@ public class ReimbursementController implements Controller{
 		User currentlyLoggedInUser = (User) ctx.req.getSession().getAttribute("currentuser");
 		this.authService.authorizeEmployeeAndFinanceManager(currentlyLoggedInUser);
 
-		// If the above this.authService.authorizeAssociateAndTrainer(...) method did
+		// If the above this.authService.authorizeEmployeeAndFinanceManager(...) method did
 		// not throw an exception, that means
 		// our program will continue to proceed to the below functionality
 		List<Reimbursement> reimbursements = this.reimbursementService.getReimbursement(currentlyLoggedInUser);
@@ -46,7 +46,7 @@ public class ReimbursementController implements Controller{
 		this.authService.authorizeFinanceManager(currentlyLoggedInUser);
 
 		String reimbursementId = ctx.pathParam("reimb_id"); // remember that "reimb_id" has to match what is in
-															// "/assignments/{reimb_id}/grade"
+															// "/reimbursements/{reimb_id}/amount"
 		ChangeReimbursementDTO dto = ctx.bodyAsClass(ChangeReimbursementDTO.class); // Taking the request body ->
 																					// putting the data into a new
 																					// object
@@ -115,9 +115,9 @@ public class ReimbursementController implements Controller{
 
 	@Override
 	public void mapEndpoints(Javalin app) {
-		app.get("/assignments", getReimbursement);
-		app.patch("/assignments/{reimb_id}/grade", changeReimbursement);
-		app.post("/assignments", addReimbursement);
-		app.get("/assignments/{reimb_id}/image", getImageFromReimbursementById);
+		app.get("/reimbursements", getReimbursement);
+		app.patch("/reimbursements/{reimb_id}/amount", changeReimbursement);
+		app.post("/reimbursements", addReimbursement);
+		app.get("/reimbursement/{reimb_id}/image", getImageFromReimbursementById);
 	}
 }

@@ -17,7 +17,7 @@ public class Reimbursement {
 		super();
 	}
 
-	public Reimbursement(int id, int reimbursementAmount, String reimbursementSubmitted, String reimbursementResolved, String status,  String reimbursementDesc, int financeManagerId, int authorId) {
+	public Reimbursement(int id, int reimbursementAmount, String reimbursementSubmitted, String reimbursementResolved, String status,  String reimbursementDesc, int authorId, int financeManagerId) {
 		super();
 		this.id = id;
 		this.reimbursementAmount = reimbursementAmount;
@@ -25,8 +25,8 @@ public class Reimbursement {
 		this.reimbursementResolved = reimbursementResolved; // not null, needs something 
 		this.status = status; // not null, needs something 
 		this.reimbursementDesc = reimbursementDesc; // not null, needs something 
-		this.financeManagerId = financeManagerId;
 		this.authorId = authorId;
+		this.financeManagerId = financeManagerId;
 	}
 
 	public int getId() {
@@ -77,20 +77,20 @@ public class Reimbursement {
 		this.reimbursementDesc = reimbursementDesc;
 	}
 
-	public int getFinanceManagerId() {
-		return financeManagerId;
-	}
-
-	public void setFinanceManagerId(int financeManagerId) {
-		this.financeManagerId = financeManagerId;
-	}
-
 	public int getAuthorId() {
 		return authorId;
 	}
 
 	public void setAuthorId(int authorId) {
 		this.authorId = authorId;
+	}
+	
+	public int getFinanceManagerId() {
+		return financeManagerId;
+	}
+
+	public void setFinanceManagerId(int financeManagerId) {
+		this.financeManagerId = financeManagerId;
 	}
 
 	@Override
