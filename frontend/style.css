@@ -1,0 +1,17 @@
+label, input {
+    display: block;
+}
+
+input {
+    margin: auto;
+}
+
+#login-info {
+    text-align: center;
+    margin-top: 100px;
+}
+
+#login-info a {
+    display: block;
+    margin-top: 4rem;
+}

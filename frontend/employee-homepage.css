@@ -1,0 +1,26 @@
+#employee-homepage-grid-container {
+    display: grid; 
+    grid-template-columns: 1fr 1fr 1fr; 
+    grid-template-rows: 1fr 1fr 1fr; 
+    gap: 0px 0px; 
+    grid-template-areas: 
+      "nav nav nav"
+      "reimbursement-display reimbursement-display submit-form"
+      "reimbursement-display reimbursement-display submit-form";
+}
+
+#reimbursements {
+    grid-area: reimbursement-display;
+}
+
+#reimbursement-submit-form {
+    grid-area: submit-form;
+}
+
+#reimbursement-submit-form div {
+    margin-top: 30px;
+}
+
+nav {
+    grid-area: nav;
+}

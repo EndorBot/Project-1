@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Manager Homepage</title>
+    <!-- Using Bulma instead of local css file-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+</head>
+<body>
+    <div id="assignment-image-modal" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+        </div>
+        <button class="modal-close is-large" aria-label="close"></button>
+    </div>
+
+    <button id="logout">Logout</button>
+    <h1>Welcome to the Finance Manager homepage</h1>
+    
+    <h2>Reimbursements</h2>
+            <table id="reimbursements-table">
+                <thead>
+                    <tr>
+                        <th>id</th> <!--td1-->
+                        <th>Reimbursement Amount</th> <!--td2, not null-->
+                        <th>Date Submitted</th> <!--td3, not null-->
+                        <th>Date Resolved</th> <!--td4, not null-->
+                        <th>Status</th> <!--td5, not null-->
+                        <th>Type</th> <!--td6, not null-->
+                        <th>Reimbursement Description</th> <!--td7, not null-->
+                        <th>Receipt</th> <!--td8-->
+                        <th>Author id/ name</th> <!--td9-->
+                        <th>FM id</th> <!--td10-->
+                        <th>Action </th> <!--td11-->
+                        <!-- Do joins with the backend to get names of finance manager name and employee name-->
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+            <script src="fm-homepage.js"></script>
+</body>
+</html>

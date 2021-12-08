@@ -6,6 +6,7 @@ import com.revature.controller.ExceptionController;
 import com.revature.controller.ReimbursementController;
 
 import io.javalin.Javalin;
+import io.javalin.http.staticfiles.Location;
 
 public class Application {
 
@@ -14,7 +15,7 @@ public static void main(String[] args) {
 		Javalin app = Javalin.create((config) -> {
 			config.enableCorsForAllOrigins();
 			
-			//config.addStaticFiles("static", Location.CLASSPATH); Leave commented until front end is implemented
+			config.addStaticFiles("static", Location.CLASSPATH); // Leave commented until front end is implemented
 		});
 		
 		mapControllers(app, new AuthenticationController(), new ReimbursementController()); //
