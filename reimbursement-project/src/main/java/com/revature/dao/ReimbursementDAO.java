@@ -26,8 +26,8 @@ public class ReimbursementDAO {
 			while (rs.next()) {
 				int id = rs.getInt("reimb_id");
 				int reimbursementAmount = rs.getInt("reimb_amount");
-				String reimbursementSubmitted = rs.getString("reimb_submitted");
-				String reimbursementResolved = rs.getString("reimb_resolved");
+				String reimbursementSubmitted = rs.getString("reimb_submitted"); // might change if handled in backend
+				String reimbursementResolved = rs.getString("reimb_resolved"); // might change if handled in backend
 				String status = rs.getString("reimb_status");
 				String reimbursementDesc = rs.getString("reimb_decription");
 				int authorId = rs.getInt("reimb_author");
@@ -57,8 +57,8 @@ public class ReimbursementDAO {
 			while (rs.next()) {
 				int id = rs.getInt("reimb_id");
 				int reimbursementAmount = rs.getInt("reimb_amount");
-				String reimbursementSubmitted = rs.getString("reimb_submitted");
-				String reimbursementResolved = rs.getString("reimb_resolved");
+				String reimbursementSubmitted = rs.getString("reimb_submitted"); // might change if handled in backend
+				String reimbursementResolved = rs.getString("reimb_resolved"); // might change if handled in backend
 				String status = rs.getString("reimb_status");
 				String reimbursementDesc = rs.getString("reimb_decription");
 				int authorId = rs.getInt("reimb_author");
@@ -87,8 +87,8 @@ public class ReimbursementDAO {
 			if (rs.next()) {
 				int id = rs.getInt("reimb_id");
 				int reimbursementAmount = rs.getInt("reimb_amount");
-				String reimbursementSubmitted = rs.getString("reimb_submitted");
-				String reimbursementResolved = rs.getString("reimb_resolved");
+				String reimbursementSubmitted = rs.getString("reimb_submitted"); // might change if handled in backend
+				String reimbursementResolved = rs.getString("reimb_resolved"); // might change if handled in backend
 				String status = rs.getString("reimb_status");
 				String reimbursementDesc = rs.getString("reimb_decription");
 				int authorId = rs.getInt("reimb_author");
@@ -131,8 +131,8 @@ public class ReimbursementDAO {
 					+ " VALUES (?, ?, ?, ?, ?, ?, ?);";
 			
 			PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			pstmt.setString(1, reimbursementSubmitted);
-			pstmt.setString(2, reimbursementResolved);
+			pstmt.setString(1, reimbursementSubmitted); // might change if handled in backend
+			pstmt.setString(2, reimbursementResolved);// might change if handled in backend
 			pstmt.setString(3, status);
 			pstmt.setString(4, reimbursementDesc);
 			pstmt.setBinaryStream(6, image); // for data type BYTEA in The SQL Database

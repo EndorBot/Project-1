@@ -81,6 +81,7 @@ public class ReimbursementService {
 	public Reimbursement addReimbursement(User currentlyLoggedInUser, String mimeType, String reimbursementSubmitted,
 			String reimbursementResolved, String status, String reimbursementDesc, InputStream content)
 			throws SQLException {
+		// if making submitted and resolved not null and handled in the backend, then might want to change this.
 		Set<String> allowedFileTypes = new HashSet<>();
 		allowedFileTypes.add("image/jpeg");
 		allowedFileTypes.add("image/png");

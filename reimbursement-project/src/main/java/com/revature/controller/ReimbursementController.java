@@ -63,8 +63,8 @@ public class ReimbursementController implements Controller{
 
 		// might need other ones like submitted, resolved, status, type because those
 		// are NOT NULL
-		String reimbursementSubmitted = ctx.formParam("reimb_submitted");
-		String reimbursementResolved = ctx.formParam("reimb_resolved");
+		String reimbursementSubmitted = ctx.formParam("reimb_submitted"); // if doing in the backend, change to not null
+		String reimbursementResolved = ctx.formParam("reimb_resolved"); // if doing in the backend, change to not null
 		String status = ctx.formParam("reimb_status"); // remember can be Lodging, Travel, Food, or Other
 		String reimbursementDesc = ctx.formParam("reimb_decription");
 
