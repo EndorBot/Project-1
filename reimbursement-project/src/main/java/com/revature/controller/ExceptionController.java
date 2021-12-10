@@ -5,7 +5,7 @@ import java.security.InvalidParameterException;
 import javax.security.auth.login.FailedLoginException;
 
 import com.revature.dto.MessageDTO;
-import com.revature.exception.ReimbursementAlreadyGradedException;
+import com.revature.exception.ReimbursementAlreadyAwardedException;
 import com.revature.exception.ReimbursementImageNotFoundException;
 import com.revature.exception.ReimbursementNotFoundException;
 import com.revature.exception.UnauthorizedException;
@@ -35,7 +35,7 @@ public class ExceptionController {
 			ctx.json(new MessageDTO(e.getMessage()));
 		});
 		
-		app.exception(ReimbursementAlreadyGradedException.class, (e, ctx) -> {
+		app.exception(ReimbursementAlreadyAwardedException.class, (e, ctx) -> {
 			ctx.status(400);
 			ctx.json(new MessageDTO(e.getMessage()));
 		});

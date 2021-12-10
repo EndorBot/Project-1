@@ -23,9 +23,9 @@ VALUES
 CREATE TABLE ers_reimbursement(
 	reimb_id SERIAL PRIMARY KEY, -- a Oracle data type, but its similar to NUMERIC and DECIMAL, NUMBER is both in ORACLE
 	reimb_amount INTEGER, -- switched NUMBER to INTEGER
-	reimb_submitted TIMESTAMP NOT NULL, -- stored in YYYY-MM-DD hh:mm:ss format
-	reimb_resolved TIMESTAMP NOT NULL,
-	reimb_status VARCHAR(20) NOT NULL,
+	reimb_submitted TIMESTAMP, -- secretly taking in a unix epoc that will be converted into a normal time stamp later in YYYY-MM-DD hh:mm:ss format
+	reimb_resolved TIMESTAMP,
+	reimb_status VARCHAR(20) DEFAULT 'PENDING',
 	reimb_type VARCHAR(20) NOT NULL, -- types are: Lodging, Travel, Food, or Other
 	reimb_decription VARCHAR(255) NOT NULL,
 	reimb_recipt BYTEA, -- research on BLOB data type
@@ -37,19 +37,24 @@ CREATE TABLE ers_reimbursement(
 
 SET timezone = 'America/New_York';
 
+SELECT NOW():: timestamp(0); -- could use this to insert current timestamp with rounded seconds into database
+
+SELECT extract(epoch from now());
+select to_timestamp( extract(epoch from now()));
+-- to_timestamp( extract(epoch from now())) will supposedly return a time stamp
+
 INSERT INTO ers_reimbursement (
 	reimb_submitted,
-	reimb_resolved,
 	reimb_status,
 	reimb_type,
 	reimb_decription,
 	reimb_author
 )
 VALUES
-('2016-06-22 19:10:25-07', '2016-06-22 20:10:25-07', 'Approved', 'Travel', 'Plane Ticket to NYC', 2 ),
-('2016-06-27 08:10:25-07', '2016-06-22 10:30:50-07', 'Approved', 'Travel', 'Plane Ticket to Austin', 3),
-('2016-06-28 16:30:15-07', '2016-06-29 17:30:15-07', 'Approved', 'Travel', 'Train to Chicago',2),
-('2016-06-28 18:00:00-07', '2016-06-29 20:30:30-07', 'Denied', 'Travel', 'Train to New Jersey from NYC',3);
+(to_timestamp( extract(epoch from now())),'Approved', 'Travel', 'Plane Ticket to NYC', 2 ),
+(to_timestamp( extract(epoch from now())),'Approved', 'Travel', 'Plane Ticket to Austin', 3),
+(to_timestamp( extract(epoch from now())),'Approved', 'Travel', 'Train to Chicago',2),
+(to_timestamp( extract(epoch from now())),'Denied', 'Travel', 'Train to New Jersey from NYC',3);
 
 SELECT * FROM ers_users;
 
@@ -57,6 +62,21 @@ SELECT * FROM ers_reimbursement;
 
 UPDATE ers_reimbursement 
 SET
-reimb_amount = 500
+reimb_amount = 500,
+reimb_status = 'Approved',
 reimb_resolver = 1
 WHERE reimb_id = 1;
+
+UPDATE ers_reimbursement 
+SET
+reimb_amount = 0,
+reimb_status = 'Denied',
+reimb_resolver = 1
+WHERE reimb_id = 3;
+
+UPDATE ers_reimbursement 
+SET
+reimb_resolved = TO_TIMESTAMP(EXTRACT(epoch FROM NOW())),
+reimb_status = 'Denied',
+reimb_resolver = 1
+WHERE reimb_id = 3;

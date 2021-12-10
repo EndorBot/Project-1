@@ -29,8 +29,8 @@ let logoutBtn = document.querySelector('#logout');
 logoutBtn.addEventListener('click', async () => {
 
     let res = await fetch('http://localhost:8080/logout', {
-        'method': 'POST',
-        'credentials': 'include'
+        method: 'POST',
+        credential: 'include'
     });
 
     if (res.status === 200) {
@@ -59,16 +59,16 @@ async function populateTableWithReimbursements() {
         td1.innerHTML = reimbursement.id;
 
         let td2 = document.createElement("td"); // amount
-        //td2.innerHTML = reimbursement.amount; done in the if else
+        td2.innerHTML = reimbursement.amount;
 
-        let td3 = document.createElement("td"); // date submitted
+        let td3 = document.createElement("td"); // date submitted, might be handled differently when timestamp is implemented
         td3.innerHTML = reimbursement.dateSubmitted;
 
-        let td4 = document.createElement("td"); // date resolved
+        let td4 = document.createElement("td"); // date resolved, might be handled differently when timestamp is implemented
         td4.innerHTML = reimbursement.dateResolved;
 
         let td5 = document.createElement("td"); // status
-        td5.innerHTML = reimbursement.status;
+        // td5.innerHTML = reimbursement.status;  done in the if else
         
         let td6 = document.createElement("td"); // type
         td6.innerHTML = reimbursement.type;
@@ -92,25 +92,25 @@ async function populateTableWithReimbursements() {
 
 
         if (reimbursement.fmID != 0) {
-            td2.innerHTML = reimbursement.amount;
+            td5.innerHTML = reimbursement.status;
             td9.innerHTML = reimbursement.fmID;
         } else {
-            td2.innerHTML = 'Amount not given';
+            td5.innerHTML = 'Pending';
             td9.innerHTML = '-';
 
             // update amount button and input
-            let amountInput = document.createElement('input');
-            amountInput.setAttribute('type','number');
+            let statusInput = document.createElement('input');
+            statusInput.setAttribute('type',String);
 
             let amountButton = document.createElement('button');
             amountButton.innerText = 'Add Reimbursement Amount';
             amountButton.addEventListener('click', async () => {
-                let res = await fetch(`http://localhost:8080/reimbursements/{reimb_id}/amount`, 
+                let res = await fetch(`http://localhost:8080/reimbursements/${reimbursement.id}/amount`, 
                     {
                         credentials: 'include',
                         method: 'PATCH',
                         body: JSON.stringify({
-                            amount: amountInput.value
+                            status: statusInput.value
                         })
                     });
 

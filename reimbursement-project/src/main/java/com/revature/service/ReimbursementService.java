@@ -3,12 +3,15 @@ package com.revature.service;
 import java.io.InputStream;
 import java.security.InvalidParameterException;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import com.revature.dao.ReimbursementDAO;
-import com.revature.exception.ReimbursementAlreadyGradedException;
+import com.revature.exception.ReimbursementAlreadyAwardedException;
 import com.revature.exception.ReimbursementImageNotFoundException;
 import com.revature.exception.ReimbursementNotFoundException;
 import com.revature.exception.UnauthorizedException;
@@ -42,16 +45,17 @@ public class ReimbursementService {
 		return reimbursement;
 	}
 
-	// If a reimbursement exists it should check if it already has a amount then it
-	// throws a exception, if it doesn't then add a amount
-	// consider changing it so that the amount can be changed later
+	// If a reimbursement exists it should check if it already has a status and if it was resolved if it does then it throws ReimbursementAlreadyAwardedException 
+	// or then the finance manger can approve or deny it and then set it a resolved date 
 	public Reimbursement changeReimbursement(User currentlyLoggedInUser, String reimbursementId,
-			int reimbursementAmount)
-			throws SQLException, ReimbursementAlreadyGradedException, ReimbursementNotFoundException {
+			String status)
+			throws SQLException, ReimbursementAlreadyAwardedException, ReimbursementNotFoundException {
 		try {
 			int id = Integer.parseInt(reimbursementId);
 
 			Reimbursement reimbursement = this.reimbursementDao.getReimbursementById(id);
+
+
 
 			// 0
 			if (reimbursement == null) {
@@ -62,11 +66,10 @@ public class ReimbursementService {
 			// 1
 			if (reimbursement.getFinanceManagerId() == 0) { // if it's 0, it means that no Finance Manager has
 															// reimbursed an amount yet
-				this.reimbursementDao.changeReimbursement(id, reimbursementAmount, currentlyLoggedInUser.getId());
+				this.reimbursementDao.changeReimbursement(id, status, currentlyLoggedInUser.getId());
 			} else { // if it has already been given a reimbursement amount by a Finance Manager, and
-						// we're trying to change the
-						// reimbursement amount here, that shouldn't be allowed
-				throw new ReimbursementAlreadyGradedException(
+						// we're trying to change the reimbursement amount here, that shouldn't be allowed
+				throw new ReimbursementAlreadyAwardedException(
 						"Reimbursement has already been given an amount, so the amount cannot be changed");
 			}
 
@@ -78,15 +81,32 @@ public class ReimbursementService {
 
 	// Check if the mimetype is either JPEG, PNG, GIF, or PDF (WIP), if not throw a
 	// InvalidParameterException
-	public Reimbursement addReimbursement(User currentlyLoggedInUser, String mimeType, String reimbursementSubmitted,
-			String reimbursementResolved, String status, String reimbursementDesc, InputStream content)
+	public Reimbursement addReimbursement(User currentlyLoggedInUser, String mimeType, String reimbursementAmount,
+			String type, String reimbursementDesc, InputStream content)
 			throws SQLException {
-		// if making submitted and resolved not null and handled in the backend, then might want to change this.
+		
+		int rAmount = Integer.parseInt(reimbursementAmount);
+		// if making submitted and resolved not null and handled in the backend, then
+		// might want to change this.
 		Set<String> allowedFileTypes = new HashSet<>();
 		allowedFileTypes.add("image/jpeg");
 		allowedFileTypes.add("image/png");
 		allowedFileTypes.add("image/gif");
 		// add pdf allowedFileTypes.add(" ");
+		
+		/*
+		long unixTime = Instant.now().getEpochSecond();
+		// convert the gotten unix timestamp into milliseconds
+		long unixSeconds = unixTime;
+		// format date
+		Date date = new java.util.Date(unixSeconds * 1000L);
+		// format timezone
+		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:MM:SS");
+		sdf.setTimeZone(java.util.TimeZone.getTimeZone("GMT-5"));
+		// put timestamp into reimbursementSubmitted
+		reimbursementSubmitted = sdf.format(date);
+		 */
+		 
 
 		if (!allowedFileTypes.contains(mimeType)) {
 			throw new InvalidParameterException("When adding an recipt image, only PNG, JPEG, or GIF are allowed");
@@ -94,11 +114,9 @@ public class ReimbursementService {
 
 		// Author, reimbursement description, reimbursement submitted, reimbursement
 		// resolved, status, file content (bytes, 0s and 1s)
-		int authorId = currentlyLoggedInUser.getId(); // whoever is logged in, will be the actual author of the
-														// assignment
+		int authorId = currentlyLoggedInUser.getId(); // whoever is logged in, will be the actual author of the submitted reimbursement
 
-		Reimbursement addedReimbursement = this.reimbursementDao.addedReimbursement(reimbursementSubmitted,
-				reimbursementResolved, status, reimbursementDesc, authorId, content);
+		Reimbursement addedReimbursement = this.reimbursementDao.addedReimbursement(rAmount, type, reimbursementDesc, content, authorId);
 
 		return addedReimbursement;
 	}
@@ -108,9 +126,9 @@ public class ReimbursementService {
 		try {
 			int id = Integer.parseInt(reimbursementId);
 
-			// Check if they are an associate
+			// Check if they are an Employee
 			if (currentlyLoggedInUser.getUserRole().equals("Employee")) {
-				// Grab all of the assignments that belong to the associate
+				// Grab all of the reimbursements that belong to the Employee
 				int userId = currentlyLoggedInUser.getId();
 				List<Reimbursement> reimbursementThatBelongToEmployee = this.reimbursementDao
 						.getAllReimbursementByEmployee(userId);
@@ -120,8 +138,8 @@ public class ReimbursementService {
 					reimbursementIdsEncountered.add(r.getId());
 				}
 
-				// Check to see if the image they are trying to grab for a particular assignment
-				// is actually their own assignment
+				// Check to see if the image they are trying to grab for a particular reimbursement
+				// is actually their own reimbursement
 				if (!reimbursementIdsEncountered.contains(id)) {
 					throw new UnauthorizedException(
 							"You cannot access the recipt images of reimbursements that do not belong to yourself");

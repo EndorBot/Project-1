@@ -15,7 +15,7 @@ window.addEventListener('load', async () => {
     } else if (res.status === 401) {
         window.location.href = 'index.html';
     }
-
+    console.log('Page loaded');
     populateTableWithReimbursements();
 });
 
@@ -40,12 +40,13 @@ async function populateTableWithReimbursements() {
     let res = await fetch('http://localhost:8080/reimbursements', {
         credentials: 'include',
         method: 'GET'
+        
     });
-
+    
     let tbodyElement = document.querySelector("#reimbursements-table tbody");
     tbodyElement.innerHTML = '';
     let reimbursementArray =  await res.json();
-
+    
     for (let i = 0; i < reimbursementArray.length; i++) {
         let reimbursement = reimbursementArray[i];
 

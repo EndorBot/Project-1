@@ -16,7 +16,7 @@ import io.javalin.Javalin;
 import io.javalin.http.Handler;
 import io.javalin.http.UploadedFile;
 
-public class ReimbursementController implements Controller{
+public class ReimbursementController implements Controller {
 
 	private AuthorizationService authService;
 	private ReimbursementService reimbursementService;
@@ -32,27 +32,27 @@ public class ReimbursementController implements Controller{
 		User currentlyLoggedInUser = (User) ctx.req.getSession().getAttribute("currentuser");
 		this.authService.authorizeEmployeeAndFinanceManager(currentlyLoggedInUser);
 
-		// If the above this.authService.authorizeEmployeeAndFinanceManager(...) method did
-		// not throw an exception, that means
+		// If the above this.authService.authorizeEmployeeAndFinanceManager(...) method
+		// did not throw an exception, that means
 		// our program will continue to proceed to the below functionality
 		List<Reimbursement> reimbursements = this.reimbursementService.getReimbursement(currentlyLoggedInUser);
 
 		ctx.json(reimbursements);
 	};
 
-	// only Finance Manager (FM) can change reimbursement
+	// only Finance Manager (FM) can change reimbursement, it will have to be
+	// approved or denied
 	private Handler changeReimbursement = (ctx) -> {
 		User currentlyLoggedInUser = (User) ctx.req.getSession().getAttribute("currentuser");
 		this.authService.authorizeFinanceManager(currentlyLoggedInUser);
 
 		String reimbursementId = ctx.pathParam("reimb_id"); // remember that "reimb_id" has to match what is in
 															// "/reimbursements/{reimb_id}/amount"
-		ChangeReimbursementDTO dto = ctx.bodyAsClass(ChangeReimbursementDTO.class); // Taking the request body ->
-																					// putting the data into a new
-																					// object
+		ChangeReimbursementDTO dto = ctx.bodyAsClass(ChangeReimbursementDTO.class); 
+		// Taking the request body ->  putting the data into a new object
 
 		Reimbursement changedReimbursement = this.reimbursementService.changeReimbursement(currentlyLoggedInUser,
-				reimbursementId, dto.getReimbursementAmount());
+				reimbursementId, dto.getStatus());
 		ctx.json(changedReimbursement);
 	};
 
@@ -61,13 +61,15 @@ public class ReimbursementController implements Controller{
 		User currentlyLoggedInUser = (User) ctx.req.getSession().getAttribute("currentuser");
 		this.authService.authorizeEmployee(currentlyLoggedInUser);
 
-		// might need other ones like submitted, resolved, status, type because those
-		// are NOT NULL
-		String reimbursementSubmitted = ctx.formParam("reimb_submitted"); // if doing in the backend, change to not null
-		String reimbursementResolved = ctx.formParam("reimb_resolved"); // if doing in the backend, change to not null
-		String status = ctx.formParam("reimb_status"); // remember can be Lodging, Travel, Food, or Other
+		// might need other ones like submitted, resolved, status, type because those are NOT NULL
+		String reimbursementAmount = ctx.formParam("reimb_amount");
+		//String reimbursementSubmitted = ctx.formParam("reimb_submitted"); // if doing in the backend, Not needed
+		//String reimbursementResolved = ctx.formParam("reimb_resolved"); // if doing in the backend, change to not null
+		String type = ctx.formParam("reimb_type"); // remember can be Lodging, Travel, Food, or Other
 		String reimbursementDesc = ctx.formParam("reimb_decription");
 
+		// Used to utilizing DTO to use getStatus and getReimbursementResolved, now will do similar, but with Reimbursement model
+		// ChangeReimbursementDTO dto = ctx.bodyAsClass(ChangeReimbursementDTO.class);
 		/*
 		 * Extracting file from HTTP Request
 		 */
@@ -91,8 +93,9 @@ public class ReimbursementController implements Controller{
 		String mimeType = tika.detect(content);
 
 		// Service layer invocation
-		Reimbursement addedReimbursement = this.reimbursementService.addReimbursement(currentlyLoggedInUser, mimeType,
-				reimbursementSubmitted, reimbursementResolved, status, reimbursementDesc, content);
+		// doesn't have to follow constructor of Reimbursement
+		Reimbursement addedReimbursement = this.reimbursementService.addReimbursement(currentlyLoggedInUser, mimeType, reimbursementAmount,
+				type, reimbursementDesc, content);
 		ctx.json(addedReimbursement);
 		ctx.status(201); // Content created
 	};
@@ -104,7 +107,8 @@ public class ReimbursementController implements Controller{
 
 		String reimbursementId = ctx.pathParam("reimb_id");
 
-		InputStream image = this.reimbursementService.getImageFromReimbursementById(currentlyLoggedInUser, reimbursementId);
+		InputStream image = this.reimbursementService.getImageFromReimbursementById(currentlyLoggedInUser,
+				reimbursementId);
 
 		Tika tika = new Tika();
 		String mimeType = tika.detect(image);

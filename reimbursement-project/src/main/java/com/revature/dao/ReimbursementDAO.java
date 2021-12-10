@@ -6,7 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.revature.model.Reimbursement;
@@ -29,12 +31,13 @@ public class ReimbursementDAO {
 				String reimbursementSubmitted = rs.getString("reimb_submitted"); // might change if handled in backend
 				String reimbursementResolved = rs.getString("reimb_resolved"); // might change if handled in backend
 				String status = rs.getString("reimb_status");
+				String type = rs.getString("reimb_type");
 				String reimbursementDesc = rs.getString("reimb_decription");
 				int authorId = rs.getInt("reimb_author");
 				int financeManagerId = rs.getInt("reimb_resolver");
 
 				Reimbursement reimbursement = new Reimbursement(id, reimbursementAmount, reimbursementSubmitted,
-						reimbursementResolved, status, reimbursementDesc, authorId, financeManagerId);
+						reimbursementResolved, status, type, reimbursementDesc, authorId, financeManagerId);
 
 				reimbursements.add(reimbursement);
 			}
@@ -60,12 +63,13 @@ public class ReimbursementDAO {
 				String reimbursementSubmitted = rs.getString("reimb_submitted"); // might change if handled in backend
 				String reimbursementResolved = rs.getString("reimb_resolved"); // might change if handled in backend
 				String status = rs.getString("reimb_status");
+				String type = rs.getString("reimb_type");
 				String reimbursementDesc = rs.getString("reimb_decription");
 				int authorId = rs.getInt("reimb_author");
 				int financeManagerId = rs.getInt("reimb_resolver");
 
 				Reimbursement reimbursement = new Reimbursement(id, reimbursementAmount, reimbursementSubmitted,
-						reimbursementResolved, status, reimbursementDesc, authorId, financeManagerId);
+						reimbursementResolved, status, type, reimbursementDesc, authorId, financeManagerId);
 
 				reimbursements.add(reimbursement);
 			}
@@ -78,7 +82,7 @@ public class ReimbursementDAO {
 		try (Connection con = JDBCUtility.getConnection()) {
 
 			String sql = "SELECT reimb_id, reimb_amount, reimb_submitted, reimb_resolved, reimb_status, reimb_type, reimb_decription, reimb_author, reimb_resolver FROM ers_reimbursement WHERE reimb_id = ?";
-
+			
 			PreparedStatement pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, reimbursementId);
 
@@ -90,12 +94,13 @@ public class ReimbursementDAO {
 				String reimbursementSubmitted = rs.getString("reimb_submitted"); // might change if handled in backend
 				String reimbursementResolved = rs.getString("reimb_resolved"); // might change if handled in backend
 				String status = rs.getString("reimb_status");
+				String type = rs.getString("reimb_type");
 				String reimbursementDesc = rs.getString("reimb_decription");
 				int authorId = rs.getInt("reimb_author");
 				int financeManagerId = rs.getInt("reimb_resolver");
 
 				return new Reimbursement(id, reimbursementAmount, reimbursementSubmitted, reimbursementResolved, status,
-						reimbursementDesc, authorId, financeManagerId);
+						type, reimbursementDesc, authorId, financeManagerId);
 			} else {
 				return null;
 			}
@@ -103,13 +108,14 @@ public class ReimbursementDAO {
 		}
 	}
 
-	public void changeReimbursement(int id, int reimbursementAmount, int financeManagerId) throws SQLException {
-		try (Connection con = JDBCUtility.getConnection()) {
-			String sql = "UPDATE ers_reimbursement " + "SET " + "reimb_amount = ?, " + "reimb_resolver = ? "
-					+ "WHERE reimb_id = ?;";
+	public void changeReimbursement(int id, String status, int financeManagerId) throws SQLException {
+		try (Connection con = JDBCUtility.getConnection()) { 
+			String sql = "UPDATE ers_reimbursement " + "SET " + "reimb_resolved = TO_TIMESTAMP(EXTRACT(epoch FROM NOW())), "
+					+ "reimb_status = ?, " + "reimb_resolver = ? " + "WHERE reimb_id = ?;";
+			// TO_TIMESTAMP(EXTRACT(epoch FROM NOW())) automatically gets the unix epoc timestamp and converts it into a timestamp format
 			PreparedStatement pstmt = con.prepareStatement(sql);
 
-			pstmt.setInt(1, reimbursementAmount);
+			pstmt.setString(1, status);
 			pstmt.setInt(2, financeManagerId);
 			pstmt.setInt(3, id);
 
@@ -122,21 +128,21 @@ public class ReimbursementDAO {
 
 	}
 
-	public Reimbursement addedReimbursement(String reimbursementSubmitted, String reimbursementResolved, String status,
-			String reimbursementDesc, int authorId, InputStream image) throws SQLException {
+	public Reimbursement addedReimbursement(int rAmount, String type, String reimbursementDesc, 
+			InputStream image, int authorId) throws SQLException {
 		try (Connection con = JDBCUtility.getConnection()) {
 			con.setAutoCommit(false); // Turn off autocommit because larger objects cannot be used with auto commit
 
-			String sql = "INSERT INTO ers_reimbursement (reimb_submitted, reimb_resolved, reimb_status, reimb_type, reimb_decription, reimb_recipt, author_id)"
-					+ " VALUES (?, ?, ?, ?, ?, ?, ?);";
-			
+			String sql = "INSERT INTO ers_reimbursement (reimb_amount, reimb_submitted, reimb_type, reimb_decription, reimb_recipt, reimb_author)"
+					+ " VALUES (?, TO_TIMESTAMP(EXTRACT(epoch FROM NOW())), ?, ?, ?, ?);";
+			// TO_TIMESTAMP(EXTRACT(epoch FROM NOW())) automatically gets the unix epoc timestamp and converts it into a timestamp format 
 			PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			pstmt.setString(1, reimbursementSubmitted); // might change if handled in backend
-			pstmt.setString(2, reimbursementResolved);// might change if handled in backend
-			pstmt.setString(3, status);
-			pstmt.setString(4, reimbursementDesc);
-			pstmt.setBinaryStream(6, image); // for data type BYTEA in The SQL Database
-			pstmt.setInt(7, authorId);
+			
+			pstmt.setInt(1, rAmount);
+			pstmt.setString(2, type);
+			pstmt.setString(3, reimbursementDesc);
+			pstmt.setBinaryStream(4, image); // for data type BYTEA in The SQL Database
+			pstmt.setInt(5, authorId);
 
 			int numberOfInsertedRecords = pstmt.executeUpdate();
 
@@ -148,18 +154,22 @@ public class ReimbursementDAO {
 
 			rs.next();
 			int generatedId = rs.getInt(1);
+			Date ResolvedDate = rs.getTimestamp(3);
+			String date = "" + ResolvedDate;
 
 			con.commit(); // COMMIT
-			
+			// reimbursementResolved
 			// Should follow the same pattern as in constructor of the Reimbursement model
-			return new Reimbursement(generatedId, 0, reimbursementSubmitted, reimbursementResolved, status, reimbursementDesc, 0, authorId);
+			return new Reimbursement(generatedId, rAmount, date, null, "PENDING", type, 
+					reimbursementDesc, authorId, 0);
+			// In theory, reimbursementResolved and status should pull the existing values from the Database automatically
 		}
 	}
 
-	public InputStream getImageFromReimbursementById(int id) throws SQLException{
+	public InputStream getImageFromReimbursementById(int id) throws SQLException {
 		try (Connection con = JDBCUtility.getConnection()) {
 			String sql = "SELECT reimb_recipt FROM ers_reimbursement WHERE reimb_id = ?";
-			
+
 			PreparedStatement pstmt = con.prepareStatement(sql);
 
 			pstmt.setInt(1, id);

@@ -1,14 +1,16 @@
 package com.revature.model;
 
+import java.sql.Timestamp;
 import java.util.Objects;
 
 public class Reimbursement {
 	// contains all the same credentials as the database
 	private int id;
 	private int reimbursementAmount;
-	private String reimbursementSubmitted;
-	private String reimbursementResolved;
+	private String reimbursementSubmitted; // since it will be taking in a type long for the unix epoch timestamp and turn it into a timestamp
+	private String reimbursementResolved; // since it will be taking in a type long for the unix epoch timestamp and turn it into a timestamp
 	private String status;
+	private String type;
 	private String reimbursementDesc;
 	private int financeManagerId;
 	private int authorId;
@@ -17,14 +19,16 @@ public class Reimbursement {
 		super();
 	}
 
-	public Reimbursement(int id, int reimbursementAmount, String reimbursementSubmitted, String reimbursementResolved, String status,  String reimbursementDesc, int authorId, int financeManagerId) {
+	public Reimbursement(int id, int reimbursementAmount, String reimbursementSubmitted, String reimbursementResolved,
+			String status, String type, String reimbursementDesc, int authorId, int financeManagerId) {
 		super();
 		this.id = id;
 		this.reimbursementAmount = reimbursementAmount;
-		this.reimbursementSubmitted = reimbursementSubmitted; // not null, needs something 
-		this.reimbursementResolved = reimbursementResolved; // not null, needs something 
-		this.status = status; // not null, needs something 
-		this.reimbursementDesc = reimbursementDesc; // not null, needs something 
+		this.reimbursementSubmitted = reimbursementSubmitted;
+		this.reimbursementResolved = reimbursementResolved;
+		this.status = status; // not null, needs something
+		this.type = type;
+		this.reimbursementDesc = reimbursementDesc; // not null, needs something
 		this.authorId = authorId;
 		this.financeManagerId = financeManagerId;
 	}
@@ -69,12 +73,28 @@ public class Reimbursement {
 		this.status = status;
 	}
 
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	public String getReimbursementDesc() {
 		return reimbursementDesc;
 	}
 
 	public void setReimbursementDesc(String reimbursementDesc) {
 		this.reimbursementDesc = reimbursementDesc;
+	}
+
+	public int getFinanceManagerId() {
+		return financeManagerId;
+	}
+
+	public void setFinanceManagerId(int financeManagerId) {
+		this.financeManagerId = financeManagerId;
 	}
 
 	public int getAuthorId() {
@@ -84,19 +104,11 @@ public class Reimbursement {
 	public void setAuthorId(int authorId) {
 		this.authorId = authorId;
 	}
-	
-	public int getFinanceManagerId() {
-		return financeManagerId;
-	}
-
-	public void setFinanceManagerId(int financeManagerId) {
-		this.financeManagerId = financeManagerId;
-	}
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(authorId, financeManagerId, id, reimbursementAmount, reimbursementDesc,
-				reimbursementResolved, reimbursementSubmitted, status);
+				reimbursementResolved, reimbursementSubmitted, status, type);
 	}
 
 	@Override
@@ -113,17 +125,15 @@ public class Reimbursement {
 				&& Objects.equals(reimbursementDesc, other.reimbursementDesc)
 				&& Objects.equals(reimbursementResolved, other.reimbursementResolved)
 				&& Objects.equals(reimbursementSubmitted, other.reimbursementSubmitted)
-				&& Objects.equals(status, other.status);
+				&& Objects.equals(status, other.status) && Objects.equals(type, other.type);
 	}
 
 	@Override
 	public String toString() {
 		return "Reimbursement [id=" + id + ", reimbursementAmount=" + reimbursementAmount + ", reimbursementSubmitted="
 				+ reimbursementSubmitted + ", reimbursementResolved=" + reimbursementResolved + ", status=" + status
-				+ ", reimbursementDesc=" + reimbursementDesc + ", financeManagerId=" + financeManagerId + ", authorId="
-				+ authorId + "]";
+				+ ", type=" + type + ", reimbursementDesc=" + reimbursementDesc + ", financeManagerId="
+				+ financeManagerId + ", authorId=" + authorId + "]";
 	}
-	
-	
-}
 
+}
