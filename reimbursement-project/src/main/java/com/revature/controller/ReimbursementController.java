@@ -47,7 +47,7 @@ public class ReimbursementController implements Controller {
 		this.authService.authorizeFinanceManager(currentlyLoggedInUser);
 
 		String reimbursementId = ctx.pathParam("reimb_id"); // remember that "reimb_id" has to match what is in
-															// "/reimbursements/{reimb_id}/amount"
+															// "/reimbursements/{reimb_id}/status"
 		ChangeReimbursementDTO dto = ctx.bodyAsClass(ChangeReimbursementDTO.class); 
 		// Taking the request body ->  putting the data into a new object
 
@@ -120,7 +120,7 @@ public class ReimbursementController implements Controller {
 	@Override
 	public void mapEndpoints(Javalin app) {
 		app.get("/reimbursements", getReimbursement);
-		app.patch("/reimbursements/{reimb_id}/amount", changeReimbursement);
+		app.patch("/reimbursements/{reimb_id}/status", changeReimbursement);
 		app.post("/reimbursements", addReimbursement);
 		app.get("/reimbursement/{reimb_id}/image", getImageFromReimbursementById);
 	}

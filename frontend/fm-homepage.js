@@ -59,13 +59,13 @@ async function populateTableWithReimbursements() {
         td1.innerHTML = reimbursement.id;
 
         let td2 = document.createElement("td"); // amount
-        td2.innerHTML = reimbursement.amount;
+        td2.innerHTML = reimbursement.reimbursementAmount;
 
         let td3 = document.createElement("td"); // date submitted, might be handled differently when timestamp is implemented
-        td3.innerHTML = reimbursement.dateSubmitted;
+        td3.innerHTML = reimbursement.reimbursementSubmitted;
 
         let td4 = document.createElement("td"); // date resolved, might be handled differently when timestamp is implemented
-        td4.innerHTML = reimbursement.dateResolved;
+        td4.innerHTML = reimbursement.reimbursementResolved;
 
         let td5 = document.createElement("td"); // status
         // td5.innerHTML = reimbursement.status;  done in the if else
@@ -80,10 +80,10 @@ async function populateTableWithReimbursements() {
         td8.innerHTML = reimbursement.authorId;
 
         let td9 = document.createElement('td'); // FM id or finance manager id, used to be td10, now 9
-       // td9.innerHTML = reimbursement.fmID; done in the if else
+       // td9.innerHTML = reimbursement.financeManagerId; done in the if else
 
-        let td10 = document.createElement('td'); // update amount button
-        let td11 = document.createElement('td'); // amount input
+        let td10 = document.createElement('td'); // update status button
+        let td11 = document.createElement('td'); // status input
 
         let td12 = document.createElement('td'); // image becomes td12, used to be td8
         let viewImageButton = document.createElement('button');
@@ -91,21 +91,38 @@ async function populateTableWithReimbursements() {
         td12.appendChild(viewImageButton);
 
 
-        if (reimbursement.fmID != 0) {
+        if (reimbursement.financeManagerId != 0) {
             td5.innerHTML = reimbursement.status;
-            td9.innerHTML = reimbursement.fmID;
+            td9.innerHTML = reimbursement.financeManagerId;
         } else {
-            td5.innerHTML = 'Pending';
+            td5.innerHTML = 'PENDING';
             td9.innerHTML = '-';
+            /*
+            function statusInput(){
+                document.getElementById("statusDropdown").classList.toggle("show");
+            }
 
-            // update amount button and input
+            window.onclick = function(event) {
+                if (!event.target.matches('.statusbtn')) {
+                    let dropdowns = document.getElementsByClassName("dropdown-content");
+                    let i;
+                    for (i = 0; i < dropdowns.length; i++){
+                        let openDropdown = dropdowns[i];
+                        if (openDropdown.classList.contains('show')){
+                            openDropdown.classList.remove('show');
+                        }
+                    }
+                }
+            }
+			*/
+            // update status button and input
             let statusInput = document.createElement('input');
             statusInput.setAttribute('type',String);
 
-            let amountButton = document.createElement('button');
-            amountButton.innerText = 'Add Reimbursement Amount';
-            amountButton.addEventListener('click', async () => {
-                let res = await fetch(`http://localhost:8080/reimbursements/${reimbursement.id}/amount`, 
+            let statusButton = document.createElement('button');
+            statusButton.innerText = 'Add Reimbursement Status';
+            statusButton.addEventListener('click', async () => {
+                let res = await fetch(`http://localhost:8080/reimbursements/${reimbursement.id}/status`, 
                     {
                         credentials: 'include',
                         method: 'PATCH',
@@ -118,10 +135,10 @@ async function populateTableWithReimbursements() {
                     populateTableWithReimbursements(); // Calling the function to repopulate the entire
                     // table again
                 }
-            })
+            });
 
-            td10.appendChild(amountButton);
-            td11.appendChild(amountInput);
+            td10.appendChild(statusButton);
+            td11.appendChild(statusInput);
         }
 
         viewImageButton.addEventListener('click', () => {
@@ -146,7 +163,7 @@ async function populateTableWithReimbursements() {
             modalContentElement.appendChild(imageElement);
 
             reimbursementImageModal.classList.add('is-active'); // add a class to the modal element to have it display
-        });
+        })
 
         tr.appendChild(td1); // id
         tr.appendChild(td2); // Reimbursement Amount
@@ -157,8 +174,8 @@ async function populateTableWithReimbursements() {
         tr.appendChild(td7); // Reimbursement Description, old td2       
         tr.appendChild(td8); // author id
         tr.appendChild(td9); // FM id
-        tr.appendChild(td10); // update amount button
-        tr.appendChild(td11); // amount input
+        tr.appendChild(td10); // update status button
+        tr.appendChild(td11); // status input
         tr.appendChild(td12); // receipt image
         tbodyElement.appendChild(tr);
     }

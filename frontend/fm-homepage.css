@@ -1,0 +1,15 @@
+#fm-homepage-grid-container {
+    display: grid; 
+    grid-template-columns: 0.3fr 2.6fr 0.2fr; 
+    grid-template-rows: 0.4fr 2.2fr 0.6fr; 
+    gap: 0px 0px; 
+    grid-template-areas: 
+      "title title title"
+      "table table table"
+      /*"reimbursement-display reimbursement-display submit-form"
+      "reimbursement-display reimbursement-display submit-form";*/
+}
+
+#title{ grid-area: title; }
+
+#reimbursements { grid-area: table; }

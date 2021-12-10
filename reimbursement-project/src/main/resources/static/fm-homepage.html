@@ -5,7 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finance Manager Homepage</title>
+    
     <!-- Using Bulma instead of local css file-->
+    <link rel="stylesheet" href="fm-homepage.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 </head>
 <body>
@@ -15,32 +17,39 @@
         </div>
         <button class="modal-close is-large" aria-label="close"></button>
     </div>
-
-    <button id="logout">Logout</button>
-    <h1>Welcome to the Finance Manager homepage</h1>
-    
-    <h2>Reimbursements</h2>
-            <table id="reimbursements-table">
-                <thead>
-                    <tr>
-                        <th>id</th> <!--td1-->
-                        <th>Reimbursement Amount</th> <!--td2, not null-->
-                        <th>Date Submitted</th> <!--td3, not null-->
-                        <th>Date Resolved</th> <!--td4, not null-->
-                        <th>Status</th> <!--td5, not null-->
-                        <th>Type</th> <!--td6, not null-->
-                        <th>Reimbursement Description</th> <!--td7, not null-->
-                        <th>Receipt</th> <!--td8-->
-                        <th>Author id/ name</th> <!--td9-->
-                        <th>FM id</th> <!--td10-->
-                        <th>Action </th> <!--td11-->
-                        <!-- Do joins with the backend to get names of finance manager name and employee name-->
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-
-            <script src="fm-homepage.js"></script>
+   
+    <div id="fm-homepage-grid-container">
+        </div>
+         <div id ="title">
+             <label class="label is-large">Welcome to the Finance Manager homepage</label>
+             <button id="logout">Logout</button>
+            <label class="label is-large">Reimbursements</label>
+        </div>
+            
+            <div id ="reimbursements">
+                <table  class ="table is-bordered is-striped" id="reimbursements-table">
+                    <thead>
+                        <tr>
+                            <th>Id</th> <!--td1-->
+                            <th>Reimbursement Amount</th> <!--td2, not null-->
+                            <th>Date Submitted</th> <!--td3, not null-->
+                            <th>Date Resolved</th> <!--td4, not null-->
+                            <th>Status</th> <!--td5, not null-->
+                            <th>Type</th> <!--td6, not null-->
+                            <th>Reimbursement Description</th> <!--td7, not null-->
+                            <th>Author id</th> <!--td8 now 12-->
+                            <th>Fm id</th> <!--td9-->
+                            <th>Status button</th> <!--td10-->
+                            <th>Status input</th> <!--td11, now 10-->
+                            <th>Receipt</th> <!--td12, now 11-->
+                            <!-- Do joins with the backend to get names of finance manager name and employee name-->
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>     
+    </div>
+        <script src="fm-homepage.js"></script>
 </body>
 </html>

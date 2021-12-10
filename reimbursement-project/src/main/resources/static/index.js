@@ -70,7 +70,7 @@ async function login() {
             let loginDiv = document.querySelector('#login-info');
 
             loginErrorMessage.innerHTML = data.message;
-            loginErrorMessage.style.color = 'red';
+            loginErrorMessage.style.color = 'white';
             loginDiv.appendChild(loginErrorMessage);
         }
 

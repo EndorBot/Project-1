@@ -15,7 +15,7 @@ window.addEventListener('load', async () => {
     } else if (res.status === 401) {
         window.location.href = 'index.html';
     }
-    console.log('Page loaded');
+    
     populateTableWithReimbursements();
 });
 
@@ -46,26 +46,26 @@ async function populateTableWithReimbursements() {
     let tbodyElement = document.querySelector("#reimbursements-table tbody");
     tbodyElement.innerHTML = '';
     let reimbursementArray =  await res.json();
-    
+
     for (let i = 0; i < reimbursementArray.length; i++) {
         let reimbursement = reimbursementArray[i];
-
+       
         let tr = document.createElement('tr');
 
         let td1 = document.createElement('td'); // id
         td1.innerHTML = reimbursement.id;
 
         let td2 = document.createElement("td"); // amount
-        // td2.innerHTML = reimbursement.amount; done in the if else
+        td2.innerHTML = reimbursement.reimbursementAmount
 
         let td3 = document.createElement("td"); // date submitted
-        td3.innerHTML = reimbursement.dateSubmitted;
+        td3.innerHTML = reimbursement.reimbursementSubmitted;
 
         let td4 = document.createElement("td"); // date resolved
-        td4.innerHTML = reimbursement.dateResolved;
+        td4.innerHTML = reimbursement.reimbursementResolved;
 
         let td5 = document.createElement("td"); // status
-        td5.innerHTML = reimbursement.status;
+        //td5.innerHTML = reimbursement.status; ; done in the if else
         
         let td6 = document.createElement("td"); // type
         td6.innerHTML = reimbursement.type;
@@ -82,13 +82,13 @@ async function populateTableWithReimbursements() {
         td9.innerHTML = reimbursement.authorId;
 
         let td10 = document.createElement('td'); // FM id or finance manager id
-        // td10.innerHTML = reimbursement.fmID; done in the if else
+        // td10.innerHTML = reimbursement.financeManagerId; done in the if else
 
-        if (reimbursement.fmID != 0) {
-            td2.innerHTML = reimbursement.amount;
-            td10.innerHTML = reimbursement.fmID;
+        if (reimbursement.financeManagerId != 0) {
+            td5.innerHTML = reimbursement.status;
+            td10.innerHTML = reimbursement.financeManagerId;
         } else {
-            td2.innerHTML = 'Amount not given';
+            td5.innerHTML = 'PENDING';
             td10.innerHTML = '-';
         }
 
@@ -138,19 +138,15 @@ reimbursementSubmitButton.addEventListener('click', submitReimbursement);
 
 async function submitReimbursement() {
     // Need to have these fields because these values cannot be null in the database
-    let reimbursementDateSubmitted = document.querySelector('#reimbursement-submitted'); // change to date related
-    let reimbursementDateResolved = document.querySelector('#reimbursement-resolved'); // change to date related
-    let reimbursementStatus = document.querySelector('#reimbursement-status'); // change to drop down relation
-    let reimbursementType = document.querySelector('#reimbursement-type');
+    let reimbursementAmount = document.querySelector('#reimbursement-amount');
+    let reimbursementType = document.querySelector('#reimbursement-type');// change to drop down relation
     let reimbursementDescInput = document.querySelector('#reimbursement-description');
     let reimbursementImageInput = document.querySelector('#reimbursement-file');
 
     const file = reimbursementImageInput.files[0];
 
     let formData = new FormData();
-    formData.append('reimb_submitted', reimbursementDateSubmitted.value);
-    formData.append('reimb_resolved', reimbursementDateResolved.value);
-    formData.append('reimb_status', reimbursementStatus.value);
+    formData.append('reimb_amount', reimbursementAmount.value);
     formData.append('reimb_type', reimbursementType.value);
     formData.append('reimb_decription', reimbursementDescInput.value); // have to match database name
     formData.append('reimb_recipt', file);

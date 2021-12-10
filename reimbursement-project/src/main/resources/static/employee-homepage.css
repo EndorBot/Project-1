@@ -1,26 +1,34 @@
 #employee-homepage-grid-container {
     display: grid; 
     grid-template-columns: 1fr 1fr 1fr; 
-    grid-template-rows: 1fr 1fr 1fr; 
-    gap: 10px 10px; 
+    grid-template-rows: 0.5fr 1.5fr 1fr; 
+    gap: 0px 0px; 
     grid-template-areas: 
-      "nav nav nav"
-      "reimbursement-display reimbursement-display submit-form"
-      "reimbursement-display reimbursement-display submit-form";
+      "title title title"
+      "table table Add-new-reimbursement"
+      "table table Add-new-reimbursement"; 
+      /*"reimbursement-display reimbursement-display submit-form"
+      "reimbursement-display reimbursement-display submit-form";*/
 }
 
-#reimbursements {
-    grid-area: reimbursement-display;
-}
+#title{ grid-area: title; }
 
-#reimbursement-submit-form {
+#reimbursements { grid-area: table; }
+
+#reimbursement-submit-form{ grid-area: Add-new-reimbursement; }
+
+/*
+
+#Add-new-reimbursement {
     grid-area: submit-form;
 }
 
-#reimbursement-submit-form div {
+#Add-new-reimbursement div {
     margin-top: 30px;
 }
 
+/*
 nav {
     grid-area: nav;
 }
+*/

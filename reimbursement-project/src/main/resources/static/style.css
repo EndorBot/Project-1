@@ -1,17 +1,23 @@
-label, input {
-    display: block;
-}
-
-input {
-    margin: auto;
-}
 
 #login-info {
     text-align: center;
     margin-top: 100px;
+    align-content: center;
 }
 
 #login-info a {
     display: block;
-    margin-top: 4rem;
+    margin-top: 1rem;
 }
+
+.box{
+    background-color: wheat;
+    color: white;
+}
+
+#login-btn{
+    margin-left: 1rem;
+}
+
+
+

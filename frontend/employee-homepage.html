@@ -17,14 +17,14 @@
     </div>
     
     <div id="employee-homepage-grid-container">
-        <nav>
-            <h1>Welcome to the Employee homepage</h1>
+        <div id ="title">
+            <label class="label is-large">Welcome to the Employee homepage</label>
             <button id="logout">Logout</button>
-        </nav>
+            <label class="label is-large">Reimbursements</label>
+        </div>
 
-        <div id="reimbursements">
-            <h2>Reimbursements</h2>
-            <table id="reimbursements-table">
+        <div id="reimbursements">  
+            <table class = "table is-bordered is-striped" id="reimbursements-table">
                 <thead>
                     <tr>
                         <th>id</th> <!--td1-->
@@ -44,40 +44,43 @@
                 </tbody>
             </table>
         </div>
-
-        <div id="reimbursement-submit-form">
-            <h2>Submit New Reimbursements</h2>
-
-            <div>
-                <label for="reimbursement-submitted">Reimbursement date submitted:</label>
-                <input type="text" id="reimbursement-submitted" />
+        <div class="card">
+            <div id="reimbursement-submit-form">
+                <div  class="field">           
+                     <ion-icon size="large" name="add-circle-outline"></ion-icon>
+                    <label class="label is-large">Submit New Reimbursements</label>
+                </div>
+    
+                <div class="field">
+                    <label class="label" for="reimbursement-amount">Reimbursement amount:</label>
+                    <input type="text" id="reimbursement-amount" />
+                </div>
+    
+                <div class="field">
+                    <label  class="label" for="reimbursement-type">Reimbursement type:</label> <!-- Maybe make this into a drop down-->
+                    <input type="text" id="reimbursement-type" />
+                </div>
+    
+                <div class="field">
+                    <label  class="label" for="reimbursement-description">Reimbursement description:</label>
+                    <input type="text" id="reimbursement-description" />
+                </div>
+                
+                <div class="field">
+                    <label for="reimbursement-file">Assignment Upload (JPEG, PNG, or GIF)</label> <!--Later add PDF-->
+                    <input type="file" id="reimbursement-file" />
+                </div>
+                
+                <div class="field is-grouped">
+                    <button id="submit-reimbursement-btn">Submit assignment</button>
+                </div>
             </div>
 
-            <div>
-                <label for="reimbursement-resolved">Reimbursement date resolved:</label>
-                <input type="text" id="reimbursement-resolved" />
-            </div>
-
-            <div>
-                <label for="reimbursement-type">Reimbursement type:</label> <!-- Maybe make this into a drop down-->
-                <input type="text" id="reimbursement-type" />
-            </div>
-
-            <div>
-                <label for="reimbursement-description">Reimbursement description:</label>
-                <input type="text" id="reimbursements-description" />
-            </div>
-            
-            <div>
-                <label for="reimbursement-file">Assignment Upload (JPEG, PNG, or GIF)</label> <!--Later add PDF-->
-                <input type="file" id="reimbursement-file" />
-            </div>
-            
-            <div>
-                <button id="submit-reimbursement-btn">Submit assignment</button>
-            </div>
         </div>
+       
     </div>
     <script src="employee-homepage.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </body>
 </html>
