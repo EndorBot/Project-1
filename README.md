@@ -1,3 +1,3 @@
-# Project-1
+# Project-1, Employee Reimbursment System (ERS)
 
-A repository for a project I made during training with Revature. This is a simple full stack application that is meant to be a model for a reimbursement system for a company for their employees.
+A repository for the Employee Reimbursment System project. This is full stack application where employees can request reimbursements and managers can approve or deny those requests
