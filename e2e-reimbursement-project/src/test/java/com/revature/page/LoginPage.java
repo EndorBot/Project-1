@@ -23,7 +23,7 @@ public class LoginPage {
 	@FindBy(id="login-btn") // PageFactory annotation
 	private WebElement loginButton;
 	
-	@FindBy(xpath="//div[@id='login-info']/p")
+	@FindBy(xpath="//div[@id='login-btn']/p")
 	private WebElement errorMessage;
 	
 	public LoginPage(WebDriver driver) {
